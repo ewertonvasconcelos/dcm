@@ -84,6 +84,41 @@ function InstallUstreamer () {
     fi
 }
 
+function AddSystemdUstreamer () {
+    log "i" "Adding uStreamer to systemd"
+    ver=$(/usr/bin/ustreamer/ustreamer -v)
+    if [ "$?" == "0" ]; then
+        log "i" "uStreamer is installed on on version $ver"
+    else
+        log "e" "uStreamer is not installed, install it and try again"
+        exit 1 
+    fi 
+
+    #log "i" "Adding user ustreamer"
+
+    #sudo useradd -r ustreamer
+    #sudo usermod -a -G video ustreamer
+    
+    log "i" "Adding ustreamer to systemd"
+
+    cat << EOF > /etc/systemd/system/ustreamer@.service
+[Unit]
+Description=uStreamer service
+After=network.target
+[Service]
+Environment="SCRIPT_ARGS=%I"
+#User=ustreamer
+ExecStart=/usr/bin/ustreamer/ustreamer --process-name-prefix ustreamer-%I --log-level 0 --device /dev/video%I --device-timeout=8 --resolution 1920x1080 --host=0.0.0.0 --port=808%I
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
+    sudo systemctl enable ustreamer@.service
+    sudo systemctl enable ustreamer@0.service
+    #sudo systemctl start ustreamer@0.service
+
+}
 
 ## Function used to log information on the screen:
 function log () {
@@ -107,6 +142,7 @@ function main () {
     CheckInternetConn
     InstallRequirements
     InstallUstreamer
+    AddSystemdUstreamer
 }
 
 while [[ $# -ge 1 ]]
