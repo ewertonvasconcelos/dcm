@@ -11,7 +11,7 @@ Rodrigo de Sousa
 Sistema com componentes de software e hardware capaz de fazer a gestão de um conjunto de servidores fornecendo um conjunto de funcionalidades tais como: 
 * Ligar/Desligar/Reiniciar ;
 * Acesso à BIOS;
-* Montar mídia externa (reinstallação de sistema operacional)
+* Montar mídia externa (reinstalação de sistema operacional);
   
 -----
 # Instalando

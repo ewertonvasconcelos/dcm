@@ -46,6 +46,7 @@ function CheckIfRoot() {
     fi
 }
 
+## Checking if internet connection is available:
 function CheckInternetConn () {
     log "i" "Check internet connection:"
     echo -e "GET http://google.com HTTP/1.0\n\n" | nc google.com 80 > /dev/null 2>&1
@@ -57,12 +58,14 @@ function CheckInternetConn () {
     fi
 }
 
+## Installing system requirements:
 function InstallRequirements () {
     log "i" "Installing Requiremetns:"
     apt --yes install build-essential libevent-dev libjpeg62-dev uuid-dev libbsd-dev make gcc libjpeg8 libjpeg-turbo8 libuuid1 libbsd0
 }
 
 
+## Function used to log information on the screen:
 function log () {
     if [ "$1" == "i" ] ; then
         status="${green}INFO${reset}"
@@ -74,10 +77,36 @@ function log () {
 
 }
 
+function usage() {
+    echo "usage: $0"
+}
+
+function main () {
+    CheckDistro
+    CheckIfRoot
+    CheckInternetConn
+    InstallRequirements
+}
 
 
+while [[ $# -ge 1 ]]
+do
+    key="$1"
+	
+    case $key in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    *)
+        (>&2 echo "unknown option: $key")
+        usage
+        exit 1
+        ;;
+    esac
+    shift # past argument or value
+done
 
-CheckDistro
-CheckIfRoot
-CheckInternetConn
-InstallRequirements
+
+## Do main:
+main
