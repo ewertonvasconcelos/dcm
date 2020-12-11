@@ -64,7 +64,6 @@ function InstallRequirements () {
     apt --yes install build-essential libevent-dev libjpeg62-dev uuid-dev libbsd-dev make gcc libjpeg8 libjpeg-turbo8 libuuid1 libbsd0 git tar
 }
 
-
 function InstallUstreamer () {
     log "i" "Installing uStreamer package:"
     if [ -d "/usr/bin/ustreamer" ]; then
@@ -95,10 +94,15 @@ function AddSystemdUstreamer () {
     fi 
 
     #log "i" "Adding user ustreamer"
-
     #sudo useradd -r ustreamer
     #sudo usermod -a -G video ustreamer
-    
+
+
+    if [ -d "/etc/systemd/system/ustreamer@.service" ]; then
+        log "i" "uStreamer already in systemd services, skipping configuration"
+        return 0
+    fi
+
     log "i" "Adding ustreamer to systemd"
 
     cat << EOF > /etc/systemd/system/ustreamer@.service
@@ -114,11 +118,21 @@ WantedBy=multi-user.target
 EOF
 
 
-    sudo systemctl enable ustreamer@.service
-    sudo systemctl enable ustreamer@0.service
+    #sudo systemctl enable ustreamer@.service
+    #sudo systemctl enable ustreamer@0.service
     #sudo systemctl start ustreamer@0.service
 
 }
+
+function InstallDocker () {
+    log "i" "Starting Docker installation"
+}
+
+function InstanciateKeycloak () {
+    log "i" "Starting Keycloak instanciation on Docker"
+}
+
+
 
 ## Function used to log information on the screen:
 function log () {
@@ -143,6 +157,7 @@ function main () {
     InstallRequirements
     InstallUstreamer
     AddSystemdUstreamer
+    InstallDocker
 }
 
 while [[ $# -ge 1 ]]
