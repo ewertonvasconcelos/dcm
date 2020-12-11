@@ -24,11 +24,11 @@ function CheckDistro () {
             log "i" "Running Ubuntu, starting installation"
         else
             log "e" "Distro $DISTRO not supported, aborting."
-            exit 0
+            exit 1
         fi
     else 
         log "e" "Platform is not linux, aborting."
-        exit 0
+        exit 1
     fi
 
     unset UNAME 
@@ -40,7 +40,7 @@ function CheckIfRoot() {
     log "i" "Check if running as root:"
     if [ "$EUID" -ne 0 ]; then 
         log "e" "Please run this script as root, aborting."
-        exit 0
+        exit 1
     else
         log "i" "Running as root"
     fi
@@ -61,7 +61,27 @@ function CheckInternetConn () {
 ## Installing system requirements:
 function InstallRequirements () {
     log "i" "Installing Requiremetns:"
-    apt --yes install build-essential libevent-dev libjpeg62-dev uuid-dev libbsd-dev make gcc libjpeg8 libjpeg-turbo8 libuuid1 libbsd0
+    apt --yes install build-essential libevent-dev libjpeg62-dev uuid-dev libbsd-dev make gcc libjpeg8 libjpeg-turbo8 libuuid1 libbsd0 git tar
+}
+
+
+function InstallUstreamer () {
+    log "i" "Installing uStreamer package:"
+    if [ -d "/usr/bin/ustreamer" ]; then
+        log "i" "uStreamer already installed, skipping installation"
+        return 0
+    else
+        tar -xzvf ./packages/ustreamer-*.tar.gz -C /usr/bin
+        cd /usr/bin/ustreamer
+        make
+        ver=$(/usr/bin/ustreamer/ustreamer -v)
+        if [ "$?" == "0" ]; then
+            log "i" "Successfully  installed and running on version $ver"
+        else
+            log "e" "Problem installing uStreamer, check the logs and try again"
+            exit 1 
+        fi          
+    fi
 }
 
 
@@ -86,8 +106,8 @@ function main () {
     CheckIfRoot
     CheckInternetConn
     InstallRequirements
+    InstallUstreamer
 }
-
 
 while [[ $# -ge 1 ]]
 do
@@ -106,7 +126,6 @@ do
     esac
     shift # past argument or value
 done
-
 
 ## Do main:
 main
