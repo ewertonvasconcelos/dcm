@@ -147,10 +147,14 @@ function InstallDocker () {
 
 function InstanciateKeycloakPostgres () {
     log "i" "Starting Keycloak and Postgres instanciation on Docker"
-    docker-compose -f ./containers/keycloak-postgres.yml up
-    
-}
 
+    checkKeycloakRunning=$(docker ps --filter "name=keycloak" --format '{{.Names}}' | wc -l)
+    if [ "$checkKeycloakRunning" != "0" ]; then
+        log "i" "keycloak container ir already running, skiping."
+    else
+        docker-compose -f ./containers/keycloak-postgres.yml up -d
+    fi 
+}
 
 
 ## Function used to log information on the screen:
@@ -177,6 +181,7 @@ function DoMain () {
     InstallUstreamer
     AddSystemdUstreamer
     InstallDocker
+    InstanciateKeycloakPostgres
 }
 
 while [[ $# -ge 1 ]]
