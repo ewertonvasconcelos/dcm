@@ -126,10 +126,29 @@ EOF
 
 function InstallDocker () {
     log "i" "Starting Docker installation"
-}
 
-function InstanciateKeycloak () {
-    log "i" "Starting Keycloak instanciation on Docker"
+    checkInstraled=$(dpkg -l | grep docker-ce | wc -l)
+    if [ "$checkInstraled" != "0" ]; then
+        log "i" "docker already installed, skipping docker installation"
+        return 0
+    else 
+        wget -qO- https://get.docker.com/ | sh
+    fi
+
+    apt --yes install docker-compose
+    if [ "$?" == "0" ]; then
+        log "i" "docker-compose successfully installed"
+    else
+        log "e" "error installing docker-compose, check the logs and try again"
+        exit 1 
+    fi  
+
+} 
+
+function InstanciateKeycloakPostgres () {
+    log "i" "Starting Keycloak and Postgres instanciation on Docker"
+    docker-compose -f ./containers/keycloak-postgres.yml up
+    
 }
 
 
@@ -150,7 +169,7 @@ function usage() {
     echo "usage: $0"
 }
 
-function main () {
+function DoMain () {
     CheckDistro
     CheckIfRoot
     CheckInternetConn
@@ -179,4 +198,4 @@ do
 done
 
 ## Do main:
-main
+DoMain
