@@ -153,6 +153,7 @@ function InstanciateKeycloakPostgres () {
         log "i" "keycloak container ir already running, skiping."
     else
         docker-compose -f ./containers/keycloak-postgres.yml up -d
+        docker cp ./packages/dcm-theme/ containers_keycloak_1:/opt/jboss/keycloak/themes
     fi 
 }
 
