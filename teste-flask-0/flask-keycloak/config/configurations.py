@@ -17,7 +17,7 @@ class Config(object):
     HANDLER = "RotatingFileHandler"
     UPLOAD_FOLDER = '/static/profile/'
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
+    SERIAL_SPEED=9600
 
 class ProductionConfig(Config):
     OIDC_CLIENT_SECRETS = 'config/client_secrets_prod.json'

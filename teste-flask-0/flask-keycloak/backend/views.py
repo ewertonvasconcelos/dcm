@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from app import oidc, _logger, app
 import logging
 import os, time
+from backend.dcm import *
 
 view = Blueprint('view', __name__)
 
@@ -80,5 +81,17 @@ def upload_file():
                 return render_template('profile.html',sub=oidc.user_getfield('sub'))
 
         return render_template('profile.html', sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()), name=oidc.user_getfield('name'))
+    else:
+        return redirect(url_for('view.login'))
+
+
+
+@view.route('/sendkey', methods = ['POST'])
+def get_post_javascript_data():
+    if oidc.user_loggedin:
+        key = request.form['pressed_key']
+        print(key)
+        sendPs2Key(key)
+        return key
     else:
         return redirect(url_for('view.login'))

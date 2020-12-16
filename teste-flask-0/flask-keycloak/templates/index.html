@@ -140,6 +140,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-xl-3 mb-4">
+
                         <div class="card shadow border-left-primary py-2">
                             <div class="card-body">
                                 <div class="row align-items-center no-gutters">
@@ -151,6 +152,10 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+
                     </div>
                     <div class="col-md-6 col-xl-3 mb-4">
                         <div class="card shadow border-left-success py-2">
@@ -333,27 +338,48 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 mb-4">
-                            <div class="card text-white bg-danger shadow">
+                        <div class="col-lg-6 mb-4" >
+                            <div class="card text-white bg-danger shadow" >
                                 <div class="card-body">
-                                    <p class="m-0">Danger</p>
+                                    <p class="m-0">CONSOLE KEYBOARD</p>
                                     <p class="text-white-50 small m-0">#e74a3b</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 mb-4">
-                            <div class="card text-white bg-secondary shadow">
-                                <div class="card-body">
-                                    <p class="m-0">Secondary</p>
-                                    <p class="text-white-50 small m-0">#858796</p>
-                                </div>
-                            </div>
-                        </div>
+                    
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- <input type="text" size="40" > -->
+    <div id="keyboard" tabindex="-1" > CONSOLE</div>
+    <script>
+        document.getElementById("keyboard").addEventListener("keydown", function(event){
+            var x = event.key;
+             $.post( "/sendkey", {pressed_key: x })
+    });
+//         function myFunction(event) {
+//             $('#mydiv').focus();
+//             var x = event.key;
+//             $.post( "/sendkey", {pressed_key: x })
+//         }
+
+//         $('#mydiv').on('keydown', function(event) {
+//     //console.log(event.keyCode);
+//     switch(event.keyCode){
+//        //....your actions foeeeeeeer the keys .....
+//     }
+//  });
+
+//  $(function() {
+//     $('#mydiv').focus();
+// });
+
+
+        </script>
+
     <footer class="bg-white sticky-footer" style="background: rgb(241,247,252);">
         <div class="container my-auto">
             <div class="text-center my-auto copyright"><span>UNIVERSIDADE FEDERAL DO RIO DE JANEIRO - DEL - 2020</span></div>

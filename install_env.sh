@@ -112,7 +112,7 @@ After=network.target
 [Service]
 Environment="SCRIPT_ARGS=%I"
 #User=ustreamer
-ExecStart=/usr/bin/ustreamer/ustreamer --process-name-prefix ustreamer-%I --log-level 0 --device /dev/video%I --device-timeout=8 --resolution 1920x1080 --host=0.0.0.0 --port=808%I
+ExecStart=/usr/bin/ustreamer/ustreamer --process-name-prefix ustreamer-%I --log-level 0 --device /dev/video%I --device-timeout=8 --resolution 1920x1080 --host=0.0.0.0 --port=818%I
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -174,6 +174,16 @@ function usage() {
     echo "usage: $0"
 }
 
+# Teste later, not tested
+function AddUserPermissions () {
+    user add dcm
+    ./scripts/setSerialPermissions.sh dcm
+
+
+
+}
+
+
 function DoMain () {
     CheckDistro
     CheckIfRoot
@@ -183,6 +193,7 @@ function DoMain () {
     AddSystemdUstreamer
     InstallDocker
     InstanciateKeycloakPostgres
+    AddUserPermissions
 }
 
 while [[ $# -ge 1 ]]
