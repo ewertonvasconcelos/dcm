@@ -55,6 +55,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @view.route('/profile', methods=['GET', 'POST'])
+@oidc.require_login
 def upload_file():
     if oidc.user_loggedin:
         if request.method == 'POST':
@@ -78,15 +79,30 @@ def upload_file():
                     os.remove(filePath+filename)
 
                 file.save(os.path.join(filePath,oidc.user_getfield('sub')))
-                return render_template('profile.html',sub=oidc.user_getfield('sub'))
+                return render_template('profile.html',
+                sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()),
+                given_name=oidc.user_getfield('given_name'),
+                preferred_username=oidc.user_getfield('preferred_username'),
+                family_name=oidc.user_getfield('family_name'),
+                email=oidc.user_getfield('email'),
+                name=oidc.user_getfield('name'))
 
-        return render_template('profile.html', sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()), name=oidc.user_getfield('name'))
+        return render_template('profile.html',
+        sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()),
+        given_name=oidc.user_getfield('given_name'),
+        preferred_username=oidc.user_getfield('preferred_username'),
+        family_name=oidc.user_getfield('family_name'),
+        email=oidc.user_getfield('email'),
+        name=oidc.user_getfield('name'))
+
+
     else:
         return redirect(url_for('view.login'))
 
 
 
 @view.route('/sendkey', methods = ['POST'])
+@oidc.require_login
 def get_post_javascript_data():
     if oidc.user_loggedin:
         key = request.form['pressed_key']
@@ -95,3 +111,16 @@ def get_post_javascript_data():
         return key
     else:
         return redirect(url_for('view.login'))
+
+@view.route('/account')
+@oidc.require_login
+def change_user_settings():
+    if oidc.user_loggedin:
+        keycloak_issuer = oidc.client_secrets.get('issuer')
+        keycloak_account = '{}/account'.format(keycloak_issuer)
+        print(keycloak_account)
+        return redirect(keycloak_account)
+    else:
+        return redirect(url_for('view.login'))
+
+        
