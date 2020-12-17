@@ -121,6 +121,12 @@ def change_user_settings():
         print(keycloak_account)
         return redirect(keycloak_account)
     else:
-        return redirect(url_for('view.login'))
+        return redirect(url_for('view.index'))
 
-        
+@view.route('/server')
+@oidc.require_login
+def server_management():
+    if oidc.user_loggedin:
+        return render_template('server.html', name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
+    else:
+        return redirect(url_for('view.index'))

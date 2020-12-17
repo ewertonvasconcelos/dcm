@@ -44,7 +44,7 @@
                             <li class="nav-item dropdown no-arrow mx-1"><a class="nav-link" href="https://github.com/ewertonvasconcelos/dcm">Help</a></li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">{{ name }}</span><img class="border rounded-circle img-profile" src="/static/profile/{{ sub }}"  onerror="this.src='/static/profile/default.jpg'" ></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">{{ name }}</span><img class="border rounded-circle img-profile" src="/static/assets/profile/{{ sub }}"  onerror="this.src='/static/assets/profile/default.jpg'" ></a>
                                     <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i> Activity log</a>
                                         <div
@@ -60,7 +60,7 @@
                     <div class="col-lg-4">
                         <form method=post enctype=multipart/form-data>
                             <div class="card mb-3">
-                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="/static/profile/{{ sub }}" width="160" height="160" onerror="this.src='/static/profile/default.jpg'">
+                                <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="/static/assets/profile/{{ sub }}" width="160" height="160" onerror="this.src='/static/assets/profile/default.jpg'">
                                     <input type="file" name="file" id="profileIMage" style="display: none;" onchange="this.form.submit();" />
                                     <div class="mb-3"><button class="btn btn-primary btn-sm" type="button" onclick="document.getElementById('profileIMage').click();">Change Photo</button></div>
                                 </div>
@@ -139,6 +139,9 @@
         </footer>
 
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+
+
+
     <script src="/static/assets/js/jquery.min.js"></script>
     <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/assets/js/chart.min.js"></script>
