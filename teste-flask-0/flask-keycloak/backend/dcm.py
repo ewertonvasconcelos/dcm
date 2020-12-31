@@ -159,3 +159,7 @@ def sendPs2Key (data):
     ser = serial.Serial('/dev/ttyUSB0', 9600)
     ser.write(strPs2ScanCodeDictionary[data].encode())
 
+
+#def UsbKeyboard(data):
+
+

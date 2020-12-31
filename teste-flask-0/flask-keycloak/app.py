@@ -9,10 +9,9 @@
 
 from flask import Flask
 from flask_oidc import OpenIDConnect
-# from flask_swagger_ui import get_swaggerui_blueprint
-
 from config import config
 from backend.utils import configure_logger
+
 
 app = None
 oidc = OpenIDConnect()
@@ -20,7 +19,7 @@ _logger = None
 
 
 def create_app():
-    global app, oidc, _logger
+    global app, oidc, _logger, db
     app = Flask(__name__)
 
     # Load the configurations based on the 'FLASK_ENV' environment variable
@@ -41,6 +40,7 @@ def create_app():
     # This import here is to prevent the circular imports
     from backend.views import view as view_blueprint
     app.register_blueprint(view_blueprint)
+
 
     # Registers our swagger UI blueprint
     # swagger_docs_prefix = '{}/{}'.format(

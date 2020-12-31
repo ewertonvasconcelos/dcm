@@ -5,6 +5,7 @@ import logging
 import os, time
 from backend.dcm import *
 
+
 view = Blueprint('view', __name__)
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -128,5 +129,13 @@ def change_user_settings():
 def server_management():
     if oidc.user_loggedin:
         return render_template('server.html', name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
+    else:
+        return redirect(url_for('view.index'))
+
+@view.route('/list')
+@oidc.require_login
+def server_list():
+    if oidc.user_loggedin:
+        return render_template('list.html', name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
     else:
         return redirect(url_for('view.index'))
