@@ -4,11 +4,15 @@ from app import oidc, _logger, app
 import logging
 import os, time
 from backend.dcm import *
+from backend.models import *
+from config import config
 
 
 view = Blueprint('view', __name__)
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+db.create_all()
+
+#ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 #{'exp': 1607915952, 'iat': 1607915652, 'auth_time': 1607914183, 'jti': 'f34dd21a-b5b4-4593-94ea-c73813805618', 'iss': 'http://192.168.1.2:8080/auth/realms/flask-demo', 'aud': 'flask-client', 'sub': '3aace208-029b-4e41-a499-265a15a35b19', 'typ': 'ID', 'azp': 'flask-client', 'session_state': '6d6b4df0-a558-442b-8176-89a19aa1d329', 'at_hash': 'bDfiUj2l9qVaesCNN97-sw', 'acr': '0', 'email_verified': False, 'name': 'Ewerton Silva', 'preferred_username': 'ewerton', 'given_name': 'Ewerton', 'locale': 'pt-BR', 'family_name': 'Silva', 'email': 'ewerton.vasconcelos@poli.ufrj.br'}
 
@@ -53,7 +57,7 @@ def logout():
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in config.ALLOWED_EXTENSIONS
 
 @view.route('/profile', methods=['GET', 'POST'])
 @oidc.require_login
@@ -139,3 +143,12 @@ def server_list():
         return render_template('list.html', name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
     else:
         return redirect(url_for('view.index'))
+
+
+@view.route('/add_server', methods = ['POST'])
+@oidc.require_login
+def add_server():
+    server = Server(request.form['hostname'],request.form['dcname'],request.form['rack_id'], request.form['position'],request.form['video_port'], request.form['mgnt_port'])
+    db.session.add(server)
+    db.session.commit()
+    return redirect(url_for('view.server_list'))

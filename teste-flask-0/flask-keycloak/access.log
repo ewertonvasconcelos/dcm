@@ -14,3 +14,9 @@ INFO in views: None logged in successfully
 INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
 [2020-12-30 20:56:53,363] 127.0.0.1 requested http://localhost:5000/login
 INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2020-12-31 16:19:19,005] 127.0.0.1 requested http://localhost:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2020-12-31 16:30:00,607] 127.0.0.1 requested http://localhost:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2020-12-31 17:25:03,116] 127.0.0.1 requested http://localhost:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully

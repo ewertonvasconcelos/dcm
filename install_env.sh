@@ -156,7 +156,7 @@ function InstanciateKeycloakPostgres () {
         docker cp ./packages/dcm-theme/ containers_keycloak_1:/opt/jboss/keycloak/themes
         # script to create dcm database
         docker cp ./containers/dcm_db_create.sh containers_postgres_1:/docker-entrypoint-initdb.d/
-        docker restart containers_postgres_1
+        docker exec -i -t containers_postgres_1 bash /docker-entrypoint-initdb.d/dcm_db_create.sh
     fi 
 }
 

@@ -22,7 +22,7 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="table.html"><i class="fas fa-table"></i><span>Table</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="login.html"><i class="far fa-user-circle"></i><span>Login</span></a></li>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="modal-body">
-          <form>
+          <form method="POST" action="/add_server">
                                     <div class="form-row">
                                         <div class="col">
                                             <div class="form-group"><label for="username"><strong>hostname</strong></label><input class="form-control" type="text" placeholder="hostname" name="hostname"></div>
@@ -101,7 +101,7 @@
                                     <div class="form-row">
                                         <div class="col">
                                             <div class="form-group"><label for="first_name"><strong>Video Port</strong><br></label>
-                                            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="video_port">
                                                 <!-- <option selected></option> -->
                                                 <option value="1">/dev/vid0</option>
                                                 <option value="2">/dev/vid1</option>
@@ -113,7 +113,7 @@
                                         <div class="col-xl-1"></div>
                                         <div class="col">
                                             <div class="form-group"><label for="last_name"><strong>Management Port</strong><br></label>
-                                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="mgnt_port">
                                                     <!-- <option selected></option> -->
                                                     <option value="1">/dev/tty0</option>
                                                     <option value="2">/dev/tty1</option>
