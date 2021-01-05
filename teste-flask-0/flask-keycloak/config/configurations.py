@@ -17,6 +17,7 @@ class Config(object):
     SERIAL_SPEED=9600
     SQLALCHEMY_DATABASE_URI = 'postgresql://dcm:password@localhost:5432/dcm'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    ITENS_PER_PAGE = 10
     
 
 class ProductionConfig(Config):

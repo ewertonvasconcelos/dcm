@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, render_template, flash
+from flask import Blueprint, request, redirect, url_for, render_template, flash, session
 from werkzeug.utils import secure_filename
 from app import oidc, _logger, app
 import logging
@@ -20,10 +20,10 @@ db.create_all()
 @view.route('/')
 def index():
     if oidc.user_loggedin:
-        #return 'Logged In Home Page - Hi {}. <a href="/logout">Logout</a>'.format(oidc.user_getfield('name'))
-        #(['preferred_username', 'email', 'sub'])
-        #print(oidc.user_getfield('preferred_username'))
-        return render_template('index.html', name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
+
+        serversCount = Server.query.count()
+        serversCountActive = Server.query.filter((Server.status == "ON")).count()
+        return render_template('index.html',serversCount=serversCount, serversCountActive=serversCountActive, name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
 
     else:
         return redirect(url_for('view.login'))
@@ -137,12 +137,31 @@ def server_management():
         return redirect(url_for('view.index'))
 
 @view.route('/list')
+@view.route('/list/<int:page>')
 @oidc.require_login
-def server_list():
+def server_list(page=1):
     if oidc.user_loggedin:
-        return render_template('list.html', name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
+        try:
+            per_page = session['ITENS_PER_PAGE']
+        except:
+            per_page = config.ITENS_PER_PAGE
+
+
+        
+        pagination = Server.query.paginate(page,int(per_page),error_out=False)
+        minInPage = min((pagination.page -1 )*pagination.per_page +1,pagination.total)
+        maxInPage = min(pagination.total, pagination.page*pagination.per_page) 
+        return render_template('list.html',minInPage=minInPage, maxInPage=maxInPage, pagination=pagination, name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
     else:
         return redirect(url_for('view.index'))
+
+ 
+@view.route('/perpage')
+@oidc.require_login
+def set_perpage():
+    session['ITENS_PER_PAGE'] = request.args.get('val')
+    print(session['ITENS_PER_PAGE'])
+    return redirect(url_for('view.server_list'))
 
 
 @view.route('/add_server', methods = ['POST'])
@@ -151,4 +170,15 @@ def add_server():
     server = Server(request.form['hostname'],request.form['dcname'],request.form['rack_id'], request.form['position'],request.form['video_port'], request.form['mgnt_port'])
     db.session.add(server)
     db.session.commit()
+
     return redirect(url_for('view.server_list'))
+
+
+
+@view.route('/about')
+@oidc.require_login
+def about():
+    if oidc.user_loggedin:
+        return render_template('thirdparty.html', name=oidc.user_getfield('name'),sub=oidc.user_getfield('sub')+'?dummy=' + str(time.time()))
+    else:
+        return redirect(url_for('view.index'))

@@ -163,3 +163,5 @@ def sendPs2Key (data):
 #def UsbKeyboard(data):
 
 
+def UpdateServerStatus():
+    return 0
