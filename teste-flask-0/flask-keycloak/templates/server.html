@@ -1,6 +1,13 @@
 {% extends "main-template.html" %}
 {% block title %}Hostname{% endblock %}
 {% block content %}
+
+<style>
+   body {
+   height: 100%;
+   overflow-y: hidden;
+}
+</style>
 <div class="container-fluid">
     <h3 class="text-dark mb-1">Server Hostname: Matatabi</h3>
     <div class="row mb-3">
@@ -87,31 +94,68 @@
                     </div>
                  </li>
                  <li class="list-group-item">
-                    <div class="row align-items-center no-gutters">
+                    <div class="row align-items-center no-gutters"> 
                        <div class="col mr-2">
                           <h6 class="mb-0"><strong>Management Device</strong></h6>
                           <span class="text-xs">/dev/tty0</span>
                        </div>
                     </div>
                  </li>
+                 <li class="list-group-item">
+                  <div class="row align-items-center no-gutters"> 
+                     <div class="col mr-2">
+                        <kbd>CTRL + ALT + DEL</kbd>
+                     </div>
+                  </div>
+               </li>
              </ul>
           </div>
        </div>
        <div class="col-xl-1"></div>
        <div class="col-lg-8" >
-          <img  src="http://192.168.1.2:8180/stream" onerror="this.src='/static/assets/img/no-console.png'" class="shrinkToFit" width="1205" height="678">
-          <div id="keyboard" tabindex="-1" > CONSOLE</div>
+           <a id="video_console" href="javascript:void(0)" onkeydown='SendKeyToBackend(e)'>
+            <img id="console_mouse" src="http://192.168.1.2:8180/stream" onerror="this.src='/static/assets/img/no-console.png'" class="shrinkToFit" width="1205" height="678">
+           </a>
+           <div style="padding-top:20px;">
+           <div class="row">
+            <div id="coord"></div><div id="click"></div>
+           </div>
+        </div>
        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+
  <script>
-    document.getElementById("keyboard").addEventListener("keydown", function(event){
-        var x = event.key;
-         $.post( "/sendkey", {pressed_key: x })
+video_console.onkeydown = function SendKeyToBackend (event) {
+   var x = event.key;
+   $.post( "/sendkey", {pressed_key: x });
+}
+
+
+$(document).ready(function() {
+        $('#console_mouse').on("mousemove", function(e) {
+            var offset = $(this).offset();
+            var X = (e.pageX - offset.left);
+            var Y = (e.pageY - offset.top);
+            $('#coord').text('Mouse Position: X:' + X + ', Y: ' + Y);
+        });
     });
+
+
+$(document).ready(function() {
+   $('#console_mouse').click(function(e) {
+       var offset = $(this).offset();
+       var X = (e.pageX - offset.left);
+       var Y = (e.pageY - offset.top);
+       $('#click').text('  - Mouse Click: X: ' + X + ', Y: ' + Y);
+   });
+});
  </script>
+
+
+
  {% endblock %}
  

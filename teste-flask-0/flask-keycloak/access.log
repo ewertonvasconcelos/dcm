@@ -76,3 +76,27 @@ INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
 INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
 [2021-01-05 03:39:57,541] 127.0.0.1 requested http://localhost:5000/login
 INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-05 19:52:22,810] 127.0.0.1 requested http://localhost:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-08 22:43:54,159] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-08 22:49:07,865] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-08 22:54:18,324] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-09 00:18:40,087] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-09 00:26:23,117] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-09 00:45:07,324] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-09 00:57:29,425] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-09 02:20:45,249] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-09 02:37:03,578] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-09 03:12:16,225] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-09 03:40:21,284] 192.168.1.7 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully

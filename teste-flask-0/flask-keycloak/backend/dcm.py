@@ -1,4 +1,6 @@
 import serial
+import time 
+from collections import defaultdict
 
 def sendPs2Key (data):
     # For special characters, we sum 2k to the real value to differenciate on the arduino
@@ -160,7 +162,31 @@ def sendPs2Key (data):
     ser.write(strPs2ScanCodeDictionary[data].encode())
 
 
-#def UsbKeyboard(data):
+def SendUsbKeyboard(key):
+    ser = serial.Serial('/dev/ttyUSB0', 9600)
+    print(key)
+
+    keyCodeDictionary = {
+        "ArrowUp":b'\xda',
+        "ArrowDown":b'\xd9',
+        "ArrowLeft":b'\xd8',
+        "ArrowRight":b'\xd7',
+        "Delete":b'\xd4',
+        "Enter":b'\xb0',
+        "Escape":b'\xb1' ,
+        "Backspace":b'\xb2' 
+    }
+
+    toSend = defaultdict(lambda: key, keyCodeDictionary)
+    if isinstance(toSend[key], bytes):
+        ser.write(toSend[key])
+    else:
+        ser.write(toSend[key].encode())
+        
+
+
+    return 0
+
 
 
 def UpdateServerStatus():

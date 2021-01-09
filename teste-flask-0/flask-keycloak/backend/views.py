@@ -1,4 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash, session
+
 from werkzeug.utils import secure_filename
 from app import oidc, _logger, app
 import logging
@@ -109,13 +110,16 @@ def upload_file():
 @view.route('/sendkey', methods = ['POST'])
 @oidc.require_login
 def get_post_javascript_data():
-    if oidc.user_loggedin:
-        key = request.form['pressed_key']
-        print(key)
-        sendPs2Key(key)
-        return key
-    else:
-        return redirect(url_for('view.login'))
+    try:
+        key_control = session['KEY_CONTROL']
+    except:
+        key_control = 0
+
+    key = request.form['pressed_key']
+    # time_pressed = request.form['time_pressed']
+    # key_time = key + str(time_pressed[-4:-1])
+    SendUsbKeyboard(key)
+    return key, 200
 
 @view.route('/account')
 @oidc.require_login
@@ -123,7 +127,7 @@ def change_user_settings():
     if oidc.user_loggedin:
         keycloak_issuer = oidc.client_secrets.get('issuer')
         keycloak_account = '{}/account'.format(keycloak_issuer)
-        print(keycloak_account)
+        # print(keycloak_account)
         return redirect(keycloak_account)
     else:
         return redirect(url_for('view.index'))
