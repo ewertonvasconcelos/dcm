@@ -1,2 +1,4 @@
 *.js linguist-vendored
 teste-flask-0/env/* linguist-vendored
+packages/dcm-theme/* linguist-vendored
+teste-flask-0/flask-keycloak/static/assets/bootstrap/* linguist-vendored
