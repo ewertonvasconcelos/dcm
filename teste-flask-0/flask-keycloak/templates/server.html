@@ -3,10 +3,11 @@
 {% block content %}
 
 <style>
+   /* stop scroll on keys 
    body {
    height: 100%;
    overflow-y: hidden;
-}
+} */
 </style>
 <div class="container-fluid">
     <h3 class="text-dark mb-1">Server Hostname: Matatabi</h3>
@@ -66,14 +67,28 @@
           </div>
           <div class="card shadow mb-4" style="padding: 0;margin: 24px 0px 24px;">
              <div class="card-header py-3">
-                <h6 class="text-primary font-weight-bold m-0">Console details:</h6>
+                <h6 class="text-primary font-weight-bold m-0">Details and Controls:</h6>
              </div>
              <ul class="list-group list-group-flush">
+               <li class="list-group-item">
+                  <div class="row align-items-center no-gutters"> 
+                     <div class="col mr-2">
+                        <h6 class="mb-0"><strong>Shortcuts:</strong></h6>
+                        <input id="ctrl_alt_del_bttn" class="btn btn-primary" type="button" value="Ctrl+Alt+Del">
+                        <!-- <button id="ctrl_alt_del_bttn" type="submit" name="pressed_key" value="ctrl+alt+del"/>
+                        <button id="print_src_bttn" type="submit" name="pressed_key" value="PrintSrc"/>  -->
+                     </div>
+                  </div>
+               </li>
                 <li class="list-group-item">
                    <div class="row align-items-center no-gutters">
                       <div class="col mr-2">
-                         <h6 class="mb-0"><strong>Display Resolution:</strong></h6>
-                         <span class="text-xs">1920 x 1080 </span>
+                         <h6 class="mb-0"><strong>Clipboard</strong></h6>
+                        <div class="input-group mb-3">
+                           <input id="clipboard" type="text" class="form-control" placeholder="" aria-describedby="basic-addon2">
+                           <div class="input-group-append">
+                           <button id="post_clipboard" class="btn btn-outline-secondary" type="button">Past</button>
+                           </div>
                       </div>
                    </div>
                 </li>
@@ -101,13 +116,6 @@
                        </div>
                     </div>
                  </li>
-                 <li class="list-group-item">
-                  <div class="row align-items-center no-gutters"> 
-                     <div class="col mr-2">
-                        <kbd>CTRL + ALT + DEL</kbd>
-                     </div>
-                  </div>
-               </li>
              </ul>
           </div>
        </div>
@@ -129,11 +137,23 @@
 {% block scripts %}
 
  <script>
-video_console.onkeydown = function SendKeyToBackend (event) {
+video_console.onkeydown = function (event) {
+   event.preventDefault();
    var x = event.key;
+  
    $.post( "/sendkey", {pressed_key: x });
 }
 
+post_clipboard.onclick = function  (event) {
+   valueToSend = document.getElementById('clipboard').value;
+   $.post( "/sendkey", {pressed_key: valueToSend });
+   document.getElementById('clipboard').value = "";
+
+}
+
+ctrl_alt_del_bttn.onclick = function SendKeyToBackend (event) {
+   $.post( "/sendkey", {pressed_key: "ctrl+alt+del" });
+}
 
 $(document).ready(function() {
         $('#console_mouse').on("mousemove", function(e) {
@@ -153,7 +173,10 @@ $(document).ready(function() {
        $('#click').text('  - Mouse Click: X: ' + X + ', Y: ' + Y);
    });
 });
+
+
  </script>
+
 
 
 

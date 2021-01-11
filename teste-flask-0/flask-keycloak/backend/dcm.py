@@ -2,6 +2,64 @@ import serial
 import time 
 from collections import defaultdict
 
+def SendUsbKeyboard(key):
+    ser = serial.Serial('/dev/ttyUSB0', 9600)
+    print(key)
+
+    keyCodeDictionary = {
+        "ArrowUp":"1000",
+        "ArrowDown":"1001",
+        "ArrowLeft":"1002",
+        "ArrowRight":"1003",
+        "Delete":"1004",
+        "Enter":"1005",
+        "Escape":"1006" ,
+        "Backspace":"1007",
+        "Tab":"1008",
+        "PrintScreen":"1009",
+        "Home":"1010",
+        "End":"1011",
+        "Insert":"1012",
+        "PageUp":"1013",
+        "PageDown":"1014",
+        "Shift":"1015",
+        "Alt":"1016",
+        "Control":"1017",
+        "OS":"1018",
+        "ctrl+alt+del":"1019",
+        "NumLock":"1020",
+        "|":"1021",
+        "F1":"1101",
+        "F2":"1102",
+        "F3":"1103",
+        "F4":"1104",
+        "F5":"1105",
+        "F6":"1106",
+        "F7":"1107",
+        "F8":"1108",
+        "F9":"1109",
+        "F10":"1110",
+        "F11":"1111",
+        "F12":"1112",
+        "Dead":"",
+        "}":"|",
+        "]":"\\",
+        "\"":"~",
+        "\'":"^"
+        # "{":"`",
+        # "[":"'"
+
+    }
+
+    toSend = defaultdict(lambda: key, keyCodeDictionary)
+    ser.write(toSend[key].encode())
+        
+    return 0
+
+
+
+
+
 def sendPs2Key (data):
     # For special characters, we sum 2k to the real value to differenciate on the arduino
     strPs2ScanCodeDictionary = {
@@ -160,33 +218,6 @@ def sendPs2Key (data):
     print(strPs2ScanCodeDictionary[data])
     ser = serial.Serial('/dev/ttyUSB0', 9600)
     ser.write(strPs2ScanCodeDictionary[data].encode())
-
-
-def SendUsbKeyboard(key):
-    ser = serial.Serial('/dev/ttyUSB0', 9600)
-    print(key)
-
-    keyCodeDictionary = {
-        "ArrowUp":b'\xda',
-        "ArrowDown":b'\xd9',
-        "ArrowLeft":b'\xd8',
-        "ArrowRight":b'\xd7',
-        "Delete":b'\xd4',
-        "Enter":b'\xb0',
-        "Escape":b'\xb1' ,
-        "Backspace":b'\xb2' 
-    }
-
-    toSend = defaultdict(lambda: key, keyCodeDictionary)
-    if isinstance(toSend[key], bytes):
-        ser.write(toSend[key])
-    else:
-        ser.write(toSend[key].encode())
-        
-
-
-    return 0
-
 
 
 def UpdateServerStatus():
