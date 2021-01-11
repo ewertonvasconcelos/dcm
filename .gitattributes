@@ -1,1 +1,2 @@
 *.js linguist-vendored
+teste-flask-0/env/* linguist-vendored
