@@ -2,3 +2,5 @@
 teste-flask-0/env/* linguist-vendored
 packages/dcm-theme/* linguist-vendored
 teste-flask-0/flask-keycloak/static/assets/bootstrap/* linguist-vendored
+teste-flask-0/env/lib/python3.6/site-packages/flask_swagger_ui/dist/oauth2-redirect.html linguist-vendored
+teste-flask-0/env/lib/python3.6/site-packages/flask_swagger_ui/templates/index.template.html linguist-vendored
