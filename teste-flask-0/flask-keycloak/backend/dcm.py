@@ -1,6 +1,9 @@
 import serial
 import time 
 from collections import defaultdict
+import pyudev
+from service import Service
+
 
 def SendUsbKeyboard(key):
     ser = serial.Serial('/dev/ttyUSB0', 9600)
@@ -56,7 +59,36 @@ def SendUsbKeyboard(key):
         
     return 0
 
+def StartService(serviceName):
+    service = Service(serviceName, pid_dir='/tmp')
+    if service.is_running():
+        print("Service is running.")
+    else:
+        print(service.start())
 
+
+        
+        
+
+    print(serviceName)
+
+def get_mgnt_devs():
+    context = pyudev.Context()
+    devsList = []
+    for dev in context.list_devices(subsystem='usb-serial'):
+        devStr = str(dev.get('DEVPATH')).split('/')
+        devsList.append(devStr[-1]+' @ '+devStr[-2])
+    
+    return devsList
+
+def get_video_devs():
+    context = pyudev.Context()
+    devsList = []
+    for dev in context.list_devices(subsystem='video4linux'):
+        devStr = str(dev.get('DEVPATH')).split('/')
+        devsList.append(devStr[-1]+' @ '+devStr[-3])
+    
+    return devsList
 
 
 
