@@ -97,7 +97,6 @@ function AddSystemdUstreamer () {
     #sudo useradd -r ustreamer
     #sudo usermod -a -G video ustreamer
 
-
     if [ -d "/etc/systemd/system/ustreamer@.service" ]; then
         log "i" "uStreamer already in systemd services, skipping configuration"
         return 0
@@ -112,12 +111,12 @@ After=network.target
 [Service]
 Environment="SCRIPT_ARGS=%I"
 #User=ustreamer
-ExecStart=/usr/bin/ustreamer/ustreamer --process-name-prefix ustreamer-%I --log-level 0 --device /dev/video%I --device-timeout=8 --resolution 1920x1080 --host=0.0.0.0 --port=818%I
+ExecStart=/usr/bin/ustreamer/ustreamer --log-level 0 --device-timeout=8 --resolution 1920x1080 --host=0.0.0.0  --process-name-prefix ustreamer-%I --device /dev/video%I--port=810%I
 [Install]
 WantedBy=multi-user.target
 EOF
 
-
+    #systemctl daemon-reload
     #sudo systemctl enable ustreamer@.service
     #sudo systemctl enable ustreamer@0.service
     #sudo systemctl start ustreamer@0.service

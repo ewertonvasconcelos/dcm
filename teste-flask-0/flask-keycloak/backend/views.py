@@ -183,9 +183,16 @@ def server_management(server_id=""):
             if(not found):       
                 flash('The video device for '+server.hostname+' is not connected, check the device and try again','danger')
                 return redirect(url_for('view.server_list'))
+
+            videoDevId = videoDev.split(" ")[0][-1]
+            streamPort = "810"+videoDevId
             
-            StartService("ustreamer@" + videoDev.split(" ")[0][-1])
+            status = ManageService('ustreamer@{}'.format(videoDevId),'start')
             
+            if (status!=None):
+                flash('Error starting the video streamer for server '+server.hostname+' check the log and try again','danger')
+                return redirect(url_for('view.server_list'))
+                
             #---
             #--- Check mgnt device connected:
             found=0
@@ -199,12 +206,7 @@ def server_management(server_id=""):
             if(not found):       
                 flash('The management device for '+server.hostname+' is not connected, check the device and try again','danger')
                 return redirect(url_for('view.server_list'))
-                
-                #---
-
-                #startStreamer()
-                # flash('Server '+server.hostname+' successfuly added!','success')
-                # return redirect(url_for('view.server_list'))
+                    
         except:
             
             flash('Error opening the console for the server ' + server.hostname + ',check the logs and try again...' , 'danger')
@@ -212,6 +214,7 @@ def server_management(server_id=""):
 
 
         return render_template('server.html',
+                               streamPort=streamPort,
                                videoDev=server.video_port,
                                mgntDev=server.mgnt_port,
                                name=oidc.user_getfield('name'),
