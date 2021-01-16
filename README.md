@@ -31,10 +31,12 @@ $ ./install_env.sh
 porém funciona as demais teclas direcionais e F10, etc...
 - Captura na interface web teve ser ser alocada dentro de uma tag "a" para que fosse feita a captura do teclado com o click na imagem do stream de video.
 - Iniciando os testes do Teensyduino que em teoria deve ter compatibilidade com o "keyboard boot protocol", possibilitando o uso do enter na tela de boot.
+- a solução se deu com o uso de uma nova biblioteca para o arduino pro micro melhor implementada para omunicação usb, com suporte à simulação de teclado na tela de boot, o Project-HID. (https://github.com/NicoHood/HID")
 
 
 ## Problema Captura de vídeo:
 - Testes iniciados com RaspberryPi e captura via Auvidia B101, problemas de estabilidade, preço, limitações do rapberry -> projeto migrou para pc com captura via nova para USB;
 - Software testado com melhor desempenho e compatibilidade foi o uStreamer;
-
+- Um problema identificado foi parar o streamer de video quando o usuáro não estava conectado ao sistema. foi feita uma thread que monitora se as portas
+reservadas para streaming de video estão com conexão estabelexida, o script é executado a cada 10s, caso não haja nenum cliente esse thread envia uma interrupção para a respectiva instância de video e interrompe o streaming
 

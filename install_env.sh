@@ -64,6 +64,23 @@ function InstallRequirements () {
     apt --yes install build-essential libevent-dev libjpeg62-dev uuid-dev libbsd-dev make gcc libjpeg8 libjpeg-turbo8 libuuid1 libbsd0 git tar
 }
 
+
+function AddDcmUser() {
+    log "i" "Adding dcm user"
+    useradd -r dcm
+    usermod -aG video dcm
+    usermod -aG sudo dcm
+    echo -e "dcm\ndcm" | (passwd --stdin dcm)
+    su –s /usr/bin/zsh
+
+    log "i" "Adding sudoers rule"
+    echo "# Sudoers configuration for Date Center Mamager" >> /etc/sudoers
+    echo "dcm ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+}
+
+
+
 function InstallUstreamer () {
     log "i" "Installing uStreamer package:"
     if [ -d "/usr/bin/ustreamer" ]; then
@@ -93,10 +110,6 @@ function AddSystemdUstreamer () {
         exit 1 
     fi 
 
-    #log "i" "Adding user ustreamer"
-    #sudo useradd -r ustreamer
-    #sudo usermod -a -G video ustreamer
-
     if [ -d "/etc/systemd/system/ustreamer@.service" ]; then
         log "i" "uStreamer already in systemd services, skipping configuration"
         return 0
@@ -110,7 +123,7 @@ Description=uStreamer service
 After=network.target
 [Service]
 Environment="SCRIPT_ARGS=%I"
-#User=ustreamer
+User=dcm
 ExecStart=/usr/bin/ustreamer/ustreamer --log-level 0 --device-timeout=8 --resolution 1920x1080 --host=0.0.0.0  --process-name-prefix ustreamer-%I --device /dev/video%I--port=810%I
 [Install]
 WantedBy=multi-user.target
@@ -192,6 +205,7 @@ function DoMain () {
     CheckIfRoot
     CheckInternetConn
     InstallRequirements
+    AddDcmUser
     InstallUstreamer
     AddSystemdUstreamer
     InstallDocker

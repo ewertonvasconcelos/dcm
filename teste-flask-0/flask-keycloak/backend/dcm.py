@@ -62,11 +62,11 @@ def SendUsbKeyboard(key):
     return 0
 
 def ManageService(serviceName,action):
-    Command = 'service '+serviceName+' '+action
-    ActionResult = subprocess.Popen(Command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    Command = 'sudo service '+serviceName+' '+action
+    ActionResult = subprocess.Popen(Command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     OK, ERR = ActionResult.communicate()
     if ERR is None:
-        print("OK: The service {} was successfully {}ed!".format(serviceName, action))
+        print("- The service {} was successfully {}ed!".format(serviceName, action))
     else:
         print("ERROR: To {} the service {}".format(action, serviceName))
 
