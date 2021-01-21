@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from flask import Blueprint, request, redirect, url_for, \
-    render_template, flash, session
+    render_template, flash, session, jsonify
 
 from werkzeug.utils import secure_filename
 from app import oidc, _logger, app
@@ -136,12 +136,16 @@ def get_post_javascript_data():
         key_control = 0
 
     key = request.form['pressed_key']
+    device = request.form['mgnt_device']
 
     # time_pressed = request.form['time_pressed']
     # key_time = key + str(time_pressed[-4:-1])
 
-    SendUsbKeyboard(key)
+    SendUsbKeyboard(key,device)
     return (key, 200)
+
+
+
 
 
 @view.route('/account')
@@ -198,6 +202,7 @@ def server_management(server_id=""):
             found=0
             for mgntDev in mgntDevsList:
                 if(mgntDev.split(" ")[-1] == server.mgnt_port.split(" ")[-1]):
+                    dev = mgntDev.split(" ")[0]
                     server.mgnt_port = mgntDev
                     db.session.commit()
                     found=1
@@ -207,6 +212,12 @@ def server_management(server_id=""):
                 flash('The management device for '+server.hostname+' is not connected, check the device and try again','danger')
                 return redirect(url_for('view.server_list'))
                     
+
+            #--- Check server power state 
+
+            serverState = getPowerStateFromMgnt(dev)
+
+
         except:
             
             flash('Error opening the console for the server ' + server.hostname + ',check the logs and try again...' , 'danger')
@@ -214,7 +225,10 @@ def server_management(server_id=""):
 
 
         return render_template('server.html',
+                               serverState=serverState,
                                streamPort=streamPort,
+                               dev=server.mgnt_port.split(" ")[0],
+                               hostname=server.hostname,
                                videoDev=server.video_port,
                                mgntDev=server.mgnt_port,
                                name=oidc.user_getfield('name'),
@@ -305,6 +319,34 @@ def del_server(server_id=""):
             except:
                 flash('Error deleteting server ' + server.hostname + ',check the logs and try again...' , 'danger')
                 return redirect(url_for('view.server_list'))
+    else:
+        return redirect(url_for('view.index'))
+
+@view.route('/performpower', methods=['POST'])
+@oidc.require_login
+def perform_power():
+    if oidc.user_loggedin:
+        try:
+            request.form['powerOn'],
+            request.form['powerOff'],
+            request.form['reset']
+
+        except:
+            flash('Error adding server ' + server.hostname + ',check the logs and try again...' , 'danger')
+            return redirect(url_for('view.server_list'))
+    else:
+        return redirect(url_for('view.index'))
+
+@view.route('/getpowerstate', methods=['GET'])
+@oidc.require_login
+def get_power_state():
+    if oidc.user_loggedin:
+        serverId = request.args.get('serverId')
+        dev = request.args.get('dev')
+        state=getPowerStateFromMgnt(dev)
+        print('ok',state)
+        #updateServerPowerState(id,state)
+        return jsonify({'state':state})
     else:
         return redirect(url_for('view.index'))
 

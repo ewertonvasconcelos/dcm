@@ -71,7 +71,8 @@ function AddDcmUser() {
     usermod -aG video dcm
     usermod -aG sudo dcm
     echo -e "dcm\ndcm" | (passwd --stdin dcm)
-    su –s /usr/bin/zsh
+    usermod dcm -s /bin/bash
+
 
     log "i" "Adding sudoers rule"
     echo "# Sudoers configuration for Date Center Mamager" >> /etc/sudoers

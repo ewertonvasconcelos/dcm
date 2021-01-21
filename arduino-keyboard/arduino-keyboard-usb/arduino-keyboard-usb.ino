@@ -11,11 +11,14 @@
 #include <HID-Project.h>
 #include <HID-Settings.h>
 unsigned int key;
+int pinPower = 2;
+int pinReset = 3;
 
 
 String readString = "";
 void setup() { // initialize the buttons' inputs:
-
+  digitalWrite(pinPower, HIGH);
+  digitalWrite(pinReset, HIGH);
   Serial1.begin(9600);
   Keyboard.begin();
 }
@@ -130,6 +133,13 @@ if (readString.length()>0) {
           BootKeyboard.write(HID_KEYPAD_PIPE);
           delay(20);
         break;
+        case 1022:
+          BootKeyboard.press(KEY_LEFT_ALT);
+          BootKeyboard.press(KEY_F4);
+          delay(100);
+          BootKeyboard.releaseAll();
+          delay(10);
+        break;
         case 1101:
           BootKeyboard.write(KEY_F1);
           delay(20);
@@ -177,6 +187,16 @@ if (readString.length()>0) {
         case 1112:
           BootKeyboard.write(KEY_F12);
           delay(20);
+        break;
+        case 1200:
+          digialWrite(pinPower, LOW);
+          delay(1500);
+          digitalWrite(pinPower, HIGH);
+        break;
+        case 1201:
+          digitalWrite(pinReset, LOW);
+          delay(1500);
+          digitalWrite(pinReset, HIGH);
         break;
         default:
         break;

@@ -7,11 +7,13 @@ import os
 import threading  
 import psutil
 
-def SendUsbKeyboard(key):
-    ser = serial.Serial('/dev/ttyUSB0', 9600)
+def SendUsbKeyboard(key,dev):
+    ser = serial.Serial('/dev/{}'.format(dev), 9600)
     print(key)
 
     keyCodeDictionary = {
+        "PowerButtonPress":"1200",
+        "ResetButtonPress":"1201",
         "ArrowUp":"1000",
         "ArrowDown":"1001",
         "ArrowLeft":"1002",
@@ -31,9 +33,12 @@ def SendUsbKeyboard(key):
         "Alt":"1016",
         "Control":"1017",
         "OS":"1018",
+        "Meta":"1018",
         "ctrl+alt+del":"1019",
         "NumLock":"1020",
         "|":"1021",
+        "alt+f4":"1022",
+        "CapsLock":"",
         "F1":"1101",
         "F2":"1102",
         "F3":"1103",
@@ -256,6 +261,23 @@ def sendPs2Key (data):
 
 def UpdateServerStatus():
     return 
+
+
+
+def getPowerStateFromMgnt(dev):
+    ser = serial.Serial('/dev/{}'.format(dev), 9600)
+    requestId = '1202'
+    ser.write(requestId.encode())
+    state = ser.read().decode()
+
+    if(state=='1'):
+        serverState='ON'
+    else:
+        serverState='OFF'
+
+    print(serverState)
+    
+    return serverState
 
 
 #================================= Threading to stop non used streamers =====================================

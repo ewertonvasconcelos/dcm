@@ -24,11 +24,10 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="/"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/list"><i class="fas fa-table"></i><span>Server Management</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/server"><i class="fas fa-table"></i><span>Server</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="far fa-cogs"></i><span>Settings</span></a></li>
+                    <li class="nav-item"><a class="nav-link {% block dash_sel %}{% endblock %}" href="/"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link {% block list_sel %}{% endblock %}" href="/list"><i class="fas fa-table"></i><span>Server Management</span></a></li>
+                    <li class="nav-item"><a class="nav-link {% block prof_sel %}{% endblock %}" href="/profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="nav-item"><a class="nav-link {% block seti_sel %}{% endblock %}" href="#"><i class="fas fa-cogs"></i><span>DCM Settings</span></a></li>
                     <!-- <li class="nav-item"><a class="nav-link" href="register.html"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="forgot-password.html"><i class="fas fa-key"></i><span>Forgotten Password</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="blank.html"><i class="fas fa-window-maximize"></i><span>Blank Page</span></a></li> -->
