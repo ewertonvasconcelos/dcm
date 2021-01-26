@@ -72,3 +72,11 @@ INFO in views: ewerton.vasconcelos@poli.ufrj.br logged out
 INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
 [2021-01-20 21:49:29,768] 192.168.1.7 requested http://192.168.1.2:5000/logout
 INFO in views: ewerton.vasconcelos@poli.ufrj.br logged out
+[2021-01-20 23:34:56,310] 192.168.1.2 requested http://192.168.1.2:5000/logout
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged out
+[2021-01-25 21:48:52,115] 192.168.1.7 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-25 22:11:05,496] 192.168.1.7 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-01-25 23:53:41,515] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully

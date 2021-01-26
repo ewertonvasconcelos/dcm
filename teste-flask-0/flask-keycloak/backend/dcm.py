@@ -36,7 +36,6 @@ def SendUsbKeyboard(key,dev):
         "Meta":"1018",
         "ctrl+alt+del":"1019",
         "NumLock":"1020",
-        "|":"1021",
         "alt+f4":"1022",
         "CapsLock":"",
         "F1":"1101",
@@ -52,12 +51,19 @@ def SendUsbKeyboard(key,dev):
         "F11":"1111",
         "F12":"1112",
         "Dead":"",
-        "}":"|",
-        "]":"\\",
-        "\"":"~",
-        "\'":"^"
-        # "{":"`",
-        # "[":"'"
+        "|":"",
+        "^":"",
+        "~":"",
+        "ç":"1023",
+        "Ç":"1024",
+        "[":"1025",
+        "{":"1026",
+        "]":"1027",
+        "}":"1028",
+        "'":"1029",
+        "\"":"1030",
+        ":":"1031",
+        ";":"1032"
 
     }
 
@@ -275,7 +281,6 @@ def getPowerStateFromMgnt(dev):
     else:
         serverState='OFF'
 
-    print(serverState)
     
     return serverState
 

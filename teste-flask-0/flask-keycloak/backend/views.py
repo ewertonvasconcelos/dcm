@@ -344,7 +344,6 @@ def get_power_state():
         serverId = request.args.get('serverId')
         dev = request.args.get('dev')
         state=getPowerStateFromMgnt(dev)
-        print('ok',state)
         #updateServerPowerState(id,state)
         return jsonify({'state':state})
     else:

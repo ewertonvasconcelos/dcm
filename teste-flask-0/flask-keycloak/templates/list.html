@@ -4,7 +4,134 @@
 {% block title %}Servers{% endblock %}
 {% block list_sel %}active{% endblock %}
 {% block content %}
+
+<style>
+   /* Absolute Center Spinner */
+   .loading {
+     position: fixed;
+     z-index: 999;
+     overflow: show;
+     margin: auto;
+     top: 0;
+     left: 0;
+     bottom: 0;
+     right: 0;
+     width: 50px;
+     height: 50px;
+   }
+   
+   /* Transparent Overlay */
+   .loading:before {
+     content: '';
+     display: block;
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(255,255,255,0.5);
+   }
+   
+   /* :not(:required) hides these rules from IE9 and below */
+   .loading:not(:required) {
+     /* hide "loading..." text */
+     font: 0/0 a;
+     color: transparent;
+     text-shadow: none;
+     background-color: transparent;
+     border: 0;
+   }
+   
+   .loading:not(:required):after {
+     content: '';
+     display: block;
+     font-size: 10px;
+     width: 50px;
+     height: 50px;
+     margin-top: -0.5em;
+   
+     border: 15px solid rgba(33, 150, 243, 1.0);
+     border-radius: 100%;
+     border-bottom-color: transparent;
+     -webkit-animation: spinner 1s linear 0s infinite;
+     animation: spinner 1s linear 0s infinite;
+   
+   
+   }
+   
+   /* Animation */
+   
+   @-webkit-keyframes spinner {
+     0% {
+       -webkit-transform: rotate(0deg);
+       -moz-transform: rotate(0deg);
+       -ms-transform: rotate(0deg);
+       -o-transform: rotate(0deg);
+       transform: rotate(0deg);
+     }
+     100% {
+       -webkit-transform: rotate(360deg);
+       -moz-transform: rotate(360deg);
+       -ms-transform: rotate(360deg);
+       -o-transform: rotate(360deg);
+       transform: rotate(360deg);
+     }
+   }
+   @-moz-keyframes spinner {
+     0% {
+       -webkit-transform: rotate(0deg);
+       -moz-transform: rotate(0deg);
+       -ms-transform: rotate(0deg);
+       -o-transform: rotate(0deg);
+       transform: rotate(0deg);
+     }
+     100% {
+       -webkit-transform: rotate(360deg);
+       -moz-transform: rotate(360deg);
+       -ms-transform: rotate(360deg);
+       -o-transform: rotate(360deg);
+       transform: rotate(360deg);
+     }
+   }
+   @-o-keyframes spinner {
+     0% {
+       -webkit-transform: rotate(0deg);
+       -moz-transform: rotate(0deg);
+       -ms-transform: rotate(0deg);
+       -o-transform: rotate(0deg);
+       transform: rotate(0deg);
+     }
+     100% {
+       -webkit-transform: rotate(360deg);
+       -moz-transform: rotate(360deg);
+       -ms-transform: rotate(360deg);
+       -o-transform: rotate(360deg);
+       transform: rotate(360deg);
+     }
+   }
+   @keyframes spinner {
+     0% {
+       -webkit-transform: rotate(0deg);
+       -moz-transform: rotate(0deg);
+       -ms-transform: rotate(0deg);
+       -o-transform: rotate(0deg);
+       transform: rotate(0deg);
+     }
+     100% {
+       -webkit-transform: rotate(360deg);
+       -moz-transform: rotate(360deg);
+       -ms-transform: rotate(360deg);
+       -o-transform: rotate(360deg);
+       transform: rotate(360deg);
+     }
+   }
+   </style>
+
+
+
 <div class="container-fluid">
+   <div id="loading" style="display: none;" class="loading">Loading&#8230;</div>
+
    {% with messages = get_flashed_messages(with_categories=true) %}
       {% for category, message in messages %}
          <div class="alert alert-{{ category }}">
@@ -130,7 +257,7 @@
                      <!-- <td><button class="btn btn-primary bi bi-chevron-right" type="button" href="#" ></button></td> -->
                      <td>
                         <div role="group" class="btn-group">
-                           <a class="btn btn-primary" href="/server/{{server.id}}" role="button">
+                           <a id="serverClick" class="btn btn-primary" href="/server/{{server.id}}" role="button">
                               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" class="bi bi-three-dots">
                                  <path fill-rule="evenodd" d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
                               </svg>
@@ -200,6 +327,10 @@
    $('#selectboxperpage').on('change', function () {
        var url = $(this).val();
        window.location = url; 
+   });
+   
+   $('#serverClick').on('click', function() {
+      $('#loading').show()
    });
 
 </script>
