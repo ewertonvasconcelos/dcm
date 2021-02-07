@@ -47,6 +47,11 @@ reservadas para streaming de video estão com conexão estabelexida, o script é
 ### Lista de servidores:
 ![Lista](/printscreen/lista.png)
 
+### Adicionar servidor:
+![Add](/printscreen/add.png)
 
 ### Tela de gerência do servidor:
 ![Gerência](/printscreen/gerencia.png)
+
+### Perfil de usuário:
+![perfil](/printscreen/perfil.png)
