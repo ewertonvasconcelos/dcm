@@ -40,3 +40,13 @@ porém funciona as demais teclas direcionais e F10, etc...
 - Um problema identificado foi parar o streamer de video quando o usuáro não estava conectado ao sistema. foi feita uma thread que monitora se as portas
 reservadas para streaming de video estão com conexão estabelexida, o script é executado a cada 10s, caso não haja nenum cliente esse thread envia uma interrupção para a respectiva instância de video e interrompe o streaming
 
+## Imagens do sistema:
+### Tela principal:
+![Principal](./printscreen/principal.png)
+
+### Lista de servidores:
+![Lista](./printscreen/lista.png)
+
+
+### Tela de gerência do servidor:
+![Gerência](./printscreen/gerencia.png)
