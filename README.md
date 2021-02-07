@@ -42,11 +42,11 @@ reservadas para streaming de video estão com conexão estabelexida, o script é
 
 ## Imagens do sistema:
 ### Tela principal:
-![Principal](./printscreen/principal.png)
+![Principal](/printscreen/principal.png)
 
 ### Lista de servidores:
-![Lista](./printscreen/lista.png)
+![Lista](/printscreen/lista.png)
 
 
 ### Tela de gerência do servidor:
-![Gerência](./printscreen/gerencia.png)
+![Gerência](/printscreen/gerencia.png)
