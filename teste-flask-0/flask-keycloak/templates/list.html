@@ -242,6 +242,7 @@
                      <th>Rack</th>
                      <th>Position</th>
                      <th>Status</th>
+                     <th>Uptime</th>
                      <th>Manage</th>
                   </tr>
                </thead>
@@ -254,6 +255,7 @@
                      <td> {{ server.rack}} </td>
                      <td>{{ server.position}} </td>
                      <td>{{ server.status}}</td>
+                     <td>{{ server.uptime}} {% if server.uptime == '1' %} min {% else %} mins {% endif %}</td>
                      <!-- <td><button class="btn btn-primary bi bi-chevron-right" type="button" href="#" ></button></td> -->
                      <td>
                         <div role="group" class="btn-group">
@@ -280,6 +282,7 @@
                      <td><strong>Rack</strong></td>
                      <td><strong>Position</strong></td>
                      <td><strong>Status</strong></td>
+                     <td><strong>Uptime</strong></td>
                      <td><strong>Manage</strong></td>
                   </tr>
                </tfoot>
@@ -333,6 +336,16 @@
       $('#loading').show()
    });
 
+   window.addEventListener( "pageshow", function ( event ) {
+  var historyTraversal = event.persisted || 
+                         ( typeof window.performance != "undefined" && 
+                              window.performance.navigation.type === 2 );
+  if ( historyTraversal ) {
+    // Handle page restore.
+    window.location.reload();
+  }
+});
+      
 </script>
 {% endblock %}
 

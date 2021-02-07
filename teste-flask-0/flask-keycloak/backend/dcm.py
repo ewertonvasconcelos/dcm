@@ -3,9 +3,7 @@ import time
 from collections import defaultdict
 import pyudev
 import subprocess
-import os
-import threading  
-import psutil
+from backend.models import Server, db
 
 def SendUsbKeyboard(key,dev):
     ser = serial.Serial('/dev/{}'.format(dev), 9600)
@@ -102,6 +100,24 @@ def get_video_devs():
         devsList.append(devStr[-1]+' @ '+devStr[-3])
     
     return devsList
+
+def UpdateMgntDevicesLocation ():
+    try:
+        mgntDevsList = get_mgnt_devs()
+        serversList = Server.query.all()
+
+        for server in serversList:
+            for mgntDev in mgntDevsList:
+                if(mgntDev.split(" ")[-1] == server.mgnt_port.split(" ")[-1]):
+                    dev = mgntDev.split(" ")[0]
+                    server.mgnt_port = mgntDev
+                    db.session.commit()
+                    break
+        
+        return serversList
+    except:
+        return -1
+
 
 
 
@@ -265,11 +281,6 @@ def sendPs2Key (data):
     ser.write(strPs2ScanCodeDictionary[data].encode())
 
 
-def UpdateServerStatus():
-    return 
-
-
-
 def getPowerStateFromMgnt(dev):
     ser = serial.Serial('/dev/{}'.format(dev), 9600)
     requestId = '1202'
@@ -284,46 +295,11 @@ def getPowerStateFromMgnt(dev):
     
     return serverState
 
-
-#================================= Threading to stop non used streamers =====================================
-
-def StopNotUsedStreamers():
-    while True:           
-        actives = []
-        connList = psutil.net_connections()
-
-        #Add services active to the list:0
-
-        for conn in connList: 
-            port = conn.laddr.port
-            status =  conn.status
-            #print(conn)
-            if(port >= 8100 and port <= 8199):
-                if((port not in actives) and (status!='ESTABLISHED')):
-                    actives.append(port)
-
-        #Remove used services:
-
-        for conn in connList: 
-            port = conn.laddr.port
-            status =  conn.status
-            #print(conn)
-            if(port >= 8100 and port <= 8199):
-                if((port in actives) and (status=='ESTABLISHED')):
-                    for i in actives:
-                        actives.remove(port)
-
-        #Stop not used streamers:
-        for port in actives:
-            streamerNum = str(port)[-1]
-            status = ManageService('ustreamer@"'+streamerNum+'"','stop')
-            time.sleep(1)
-        
-        time.sleep(10)
-    
-#================================= Threading to stop non used streamers =====================================
-thread = threading.Thread(target=StopNotUsedStreamers, args=())
-thread.daemon = True 
-thread.start() 
-print("- Streamers monitoring thread activated!")
-#===============================================================================================================
+def updateServerPowerState(server_id,state):
+    try:
+        server = Server.query.filter_by(id=server_id).first()
+        if server.status != state :
+            server.status = state
+            db.session.commit()
+    except:
+            return -1

@@ -8,8 +8,10 @@ from app import oidc, _logger, app
 import logging
 import os
 import time
+import subprocess
 from backend.dcm import *
 from backend.models import *
+from backend.threads import *
 from config import config
 
 view = Blueprint('view', __name__)
@@ -28,7 +30,10 @@ def index():
         serversCount = Server.query.count()
         serversCountActive = Server.query.filter(Server.status == 'ON'
                 ).count()
+        serversList = Server.query.all()
         return render_template('index.html', serversCount=serversCount,
+                               serversList = serversList,
+                               dcmUptime=subprocess.check_output(['uptime','-p']).decode("utf-8"),
                                serversCountActive=serversCountActive,
                                name=oidc.user_getfield('name'),
                                sub=oidc.user_getfield('sub') + '?dummy='
@@ -225,6 +230,7 @@ def server_management(server_id=""):
 
 
         return render_template('server.html',
+                               server_id=server_id,
                                serverState=serverState,
                                streamPort=streamPort,
                                dev=server.mgnt_port.split(" ")[0],
@@ -291,7 +297,7 @@ def add_server():
                 request.form['rack_id'],
                 request.form['position'],
                 request.form['video_port'],
-                request.form['mgnt_port'],
+                request.form['mgnt_port']
                 )
             db.session.add(server)
             db.session.commit()
@@ -341,10 +347,10 @@ def perform_power():
 @oidc.require_login
 def get_power_state():
     if oidc.user_loggedin:
-        serverId = request.args.get('serverId')
+        server_id = request.args.get('server_id')
         dev = request.args.get('dev')
         state=getPowerStateFromMgnt(dev)
-        #updateServerPowerState(id,state)
+        updateServerPowerState(server_id,state)
         return jsonify({'state':state})
     else:
         return redirect(url_for('view.index'))
@@ -361,3 +367,6 @@ def about():
                                 + str(time.time()))
     else:
         return redirect(url_for('view.index'))
+
+
+        

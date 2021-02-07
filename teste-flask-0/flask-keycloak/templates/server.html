@@ -171,7 +171,7 @@ alt_f4.onclick = function SendKeyToBackend (event) {
 }
 
 function getPowerState(dev) {
-   $.get("/getpowerstate",{dev:dev},function(data){
+   $.get("/getpowerstate",{dev:dev,server_id:'{{server_id}}'},function(data){
       oldState = document.getElementById("statusString").innerHTML;
       document.getElementById("statusString").innerHTML = data.state;
       if(data.state != oldState) {
