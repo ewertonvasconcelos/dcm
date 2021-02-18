@@ -4,6 +4,9 @@ from collections import defaultdict
 import pyudev
 import subprocess
 from backend.models import Server, db
+import netplan
+import socket
+
 
 def SendUsbKeyboard(key,dev):
     ser = serial.Serial('/dev/{}'.format(dev), 9600)
@@ -282,16 +285,17 @@ def sendPs2Key (data):
 
 
 def getPowerStateFromMgnt(dev):
-    ser = serial.Serial('/dev/{}'.format(dev), 9600)
-    requestId = '1202'
-    ser.write(requestId.encode())
-    state = ser.read().decode()
+    # ser = serial.Serial('/dev/{}'.format(dev), 9600)
+    # requestId = '1202'
+    # ser.write(requestId.encode())
+    # state = ser.read().decode()
+    
 
-    if(state=='1'):
-        serverState='ON'
-    else:
-        serverState='OFF'
-
+    # if(state=='1'):
+    #     serverState='ON'
+    # else:
+    #     serverState='OFF'
+    serverState='ON'
     
     return serverState
 
@@ -303,3 +307,53 @@ def updateServerPowerState(server_id,state):
             db.session.commit()
     except:
             return -1
+
+
+def ConfigureNetplan(ipnetmask,gateway,dns):
+    if (ipnetmask == ""):
+        Command ='''sudo echo \"# This file describes the network interfaces available on your system
+# For more information, see netplan(5).
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        ens32:
+            dhcp4: yes\" > /etc/netplan/01-netcfg.yaml '''.format(ipnetmask,gateway,','.join(dns))
+    else:
+        Command ='''sudo echo \"# This file describes the network interfaces available on your system
+# For more information, see netplan(5).
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        ens32:
+            dhcp4: no
+            addresses:
+                - {}
+            gateway4: {}
+            nameservers:
+                addresses: [{}] \" > /etc/netplan/01-netcfg.yaml '''.format(ipnetmask,gateway,','.join(dns))
+
+    print(socket.gethostbyname(socket.gethostname()))
+    # print(Command)
+
+    # ActionResult = subprocess.Popen(Command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # OK, ERR = ActionResult.communicate()
+
+    # if ERR is None:
+    #     print("- Netplan file configured")
+    # else:
+    #     print("- Fail to create Netplan file")
+    #     return ERR
+
+    # Command ='sudo netplan apply'
+
+    # ActionResult = subprocess.Popen(Command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # OK, ERR = ActionResult.communicate()
+    # if ERR is None:
+    #     print("- Netplan configuration applied")
+    # else:
+    #     print("- Fail to apply Netplan configuration")
+
+    # return ERR
+

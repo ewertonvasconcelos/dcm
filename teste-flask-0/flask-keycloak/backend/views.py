@@ -368,5 +368,5 @@ def about():
     else:
         return redirect(url_for('view.index'))
 
-
-        
+print("Antes de entrar")
+ConfigureNetplan('192.168.1.2/24','192.168.1.1',['8.8.8.8','1.1.1.1'])

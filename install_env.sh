@@ -195,8 +195,10 @@ function usage() {
 function AddUserPermissions () {
     user add dcm
     ./scripts/setSerialPermissions.sh dcm
+}
 
-
+function ConfigureNetplan() {
+    chmod 666 /etc/netplan/01-netcfg.yaml
 
 }
 
@@ -212,6 +214,7 @@ function DoMain () {
     InstallDocker
     InstanciateKeycloakPostgres
     AddUserPermissions
+    ConfigureNetplan
 }
 
 while [[ $# -ge 1 ]]
