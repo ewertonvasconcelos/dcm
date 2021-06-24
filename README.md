@@ -5,7 +5,7 @@
 Ewerton Vasconcelos da Silva
 
 > Orientador
-Rodrigo de Sousa 
+Rodrigo de Sousa Couto
 
 > Objetivos
 Sistema com componentes de software e hardware capaz de fazer a gestão de um conjunto de servidores fornecendo um conjunto de funcionalidades tais como: 
