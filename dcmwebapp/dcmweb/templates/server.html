@@ -1,0 +1,276 @@
+{% extends "main-template.html" %}
+{% block title %}Hostname{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <h3 class="text-dark font-weight-bold mb-1">Hostname: {{hostname}}</h3>
+    <div class="row mb-3">
+       <div class="col-lg-4 col-xl-2">
+          <div id="statusColor0" class="card shadow border-left-{% if serverState=='ON'%}success{% else %}danger{%endif%} py-2">
+            <div id="test" class="text-{% if serverState=='ON'%}success{% else %}danger{%endif%}" >
+             <div class="card-body">
+                <div class="row align-items-center no-gutters">
+                   <div class="col mr-2">
+                      <div class="statuscolor text-uppercase font-weight-bold text-xs mb-1"><span>SERVER STATUS</span></div>
+                      <div class="font-weight-bold h5 mb-0"><span id="statusString">{{serverState}}</span></div>
+                  </div>
+                  <div class="col-auto"><i class="fas fa-power-off fa-2x"></i></div>
+                </div>
+             </div>
+             </div>
+          </div>
+          <div class="card shadow mb-4"></div>
+          <div class="card shadow mb-4" style="padding:0px;margin: 0px 0px 0px;">
+             <div class="card-header py-3">
+                <h6 class="text-primary font-weight-bold m-0">Power Control:</h6>
+             </div>
+             <div style="padding: 10px 0px 0px 20px;">
+                <!-- ---- -->           
+                <form >
+                   <fieldset class="form-group">
+                      <div class="row">
+                         <div class="col-sm-10">
+                            <div class="form-check">
+                               <input class="form-check-input" type="radio" name="powerbuttonrad" id="powerOn" value="true" {% if serverState=='ON'%}disabled{% else %}checked{%endif%}>
+                               <label class="form-check-label" for="gridRadios1">
+                               Power On
+                               </label>
+                            </div>
+                            <div class="form-check">
+                               <input class="form-check-input" type="radio" name="powerbuttonrad" id="powerOff" value="true" {% if serverState=='ON'%}checked{% else %}disabled{%endif%}>
+                               <label class="form-check-label" for="gridRadios2">
+                               Power Off
+                               </label>
+                            </div>
+                            <div class="form-check disabled">
+                               <input class="form-check-input" type="radio" name="powerbuttonrad" id="reset" value="true" {% if serverState=='ON'%}{% else %}disabled{%endif%}>
+                               <label class="form-check-label" for="gridRadios3">
+                               Perform Reset 
+                               </label>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row">
+                         <div class="col-sm-10" style="padding: 10px 10px 0px;" >
+                            <button type="button" id="powerperform" class="btn btn-primary">Perform Action</button>
+                         </div>
+                      </div>
+                   </fieldset>
+                </form>
+                <!-- --------- -->
+                <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="confirm-modal">
+                  <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Perform power option?</h4>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" id="modal-btn-si">Perform</button>
+                        <button type="button" class="btn btn-primary" id="modal-btn-no">Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>                
+                <!-- ---- -->   
+             </div>
+          </div>
+          <div class="card shadow mb-4" style="padding: 0;margin: 24px 0px 24px;">
+             <div class="card-header py-3">
+                <h6 class="text-primary font-weight-bold m-0">Details and Controls:</h6>
+             </div>
+             <ul class="list-group list-group-flush">
+               <li class="list-group-item">
+                  <div class="row align-items-center no-gutters"> 
+                     <div class="col mr-2">
+                        <h6 class="mb-0"><strong>Shortcuts:</strong></h6>
+                        <input id="ctrl_alt_del_bttn" class="btn btn-primary" type="button" value="Ctrl+Alt+Del">
+                        <input id="alt_f4" class="btn btn-primary" type="button" value="Alt+F4">
+                        <!-- <button id="ctrl_alt_del_bttn" type="submit" name="pressed_key" value="ctrl+alt+del"/>
+                        <button id="print_src_bttn" type="submit" name="pressed_key" value="PrintSrc"/>  -->
+                     </div>
+                  </div>
+               </li>
+                <li class="list-group-item">
+                   <div class="row align-items-center no-gutters">
+                      <div class="col mr-2">
+                         <h6 class="mb-0"><strong>Clipboard</strong></h6>
+                        <div class="input-group mb-3">
+                           <input id="clipboard" type="text" class="form-control" placeholder="" aria-describedby="basic-addon2">
+                           <div class="input-group-append">
+                           <button id="post_clipboard" class="btn btn-outline-secondary" type="button">Past</button>
+                           </div>
+                      </div>
+                   </div>
+                </li>
+                <!-- <li class="list-group-item">
+                   <div class="row align-items-center no-gutters">
+                      <div class="col mr-2">
+                         <h6 class="mb-0"><strong>Video Quality:</strong></h6>
+                         <span class="text-xs">80%</span>
+                      </div>
+                   </div>
+                </li> -->
+                <li class="list-group-item">
+                    <div class="row align-items-center no-gutters">
+                       <div class="col mr-2">
+                          <h6 class="mb-0"><strong>Video Device</strong></h6>
+                          <span class="text-xs">{{ videoDev }}</span>
+                       </div>
+                    </div>
+                 </li>
+                 <li class="list-group-item">
+                    <div class="row align-items-center no-gutters"> 
+                       <div class="col mr-2">
+                          <h6 class="mb-0"><strong>Management Device</strong></h6>
+                          <span class="text-xs">{{ mgntDev }}</span>
+                       </div>
+                    </div>
+                 </li>
+             </ul>
+          </div>
+       </div>
+       <div class="col-xl-1"></div>
+       <div class="col-lg-8" >
+           <a id="video_console" href="javascript:void(0)" onkeydown='SendKeyToBackend(e)'>
+            <img id="console_mouse" src="http://192.168.1.2:{{streamPort}}/stream" onerror="this.src='/static/assets/img/no-console.png'" class="shrinkToFit" width="1205" height="678">
+           </a>
+           <div style="padding-top:20px;">
+           <div class="row">
+            <div id="coord"></div><div id="click"></div>
+           </div>
+        </div>
+       </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+ <script>
+video_console.onkeydown = function (event) {
+   event.preventDefault();
+   var x = event.key;
+  
+   $.post( "/sendkey", {pressed_key: x, mgnt_device:'{{dev}}'});
+}
+
+post_clipboard.onclick = function  (event) {
+   valueToSend = document.getElementById('clipboard').value;
+   $.post( "/sendkey", {pressed_key: valueToSend , mgnt_device:'{{dev}}' });
+   document.getElementById('clipboard').value = "";
+
+}
+
+ctrl_alt_del_bttn.onclick = function SendKeyToBackend (event) {
+   $.post( "/sendkey", {pressed_key: "ctrl+alt+del", mgnt_device:'{{dev}}'});
+}
+
+alt_f4.onclick = function SendKeyToBackend (event) {
+   $.post( "/sendkey", {pressed_key: "alt+f4", mgnt_device:'{{dev}}'});
+}
+
+function getPowerState(dev) {
+   $.get("/getpowerstate",{dev:dev,server_id:'{{server_id}}'},function(data){
+      oldState = document.getElementById("statusString").innerHTML;
+      document.getElementById("statusString").innerHTML = data.state;
+      if(data.state != oldState) {
+         $("#statusColor0").toggleClass('border-left-danger border-left-success');
+         $("#test").toggleClass('text-danger text-success');
+      }
+      if(data.state == 'OFF') {
+         $("#powerOn").prop('disabled', false);
+         $("#powerOn").prop('checked', true);
+         $("#powerOff").prop('disabled', true);
+         $("#reset").prop('disabled', true);
+      } else {
+         $("#powerOn").prop('disabled', true);
+         $("#powerOff").prop('disabled', false);
+         $("#powerOff").prop('checked', true);
+         $("#reset").prop('disabled', false);
+      }
+   });
+
+}
+
+
+var intervalId = setInterval(function() {
+   getPowerState('{{dev}}')
+}, 8000);
+
+
+
+
+// powerperform.onclick = function SendKeyToBackend (event) {
+//    var $form = $(this).closest('form');
+//    event.preventDefault();
+//       $('#confirm').modal({
+//           backdrop: 'static',
+//           keyboard: false
+//       })
+//       .on('click', '#Perform', function(e) {
+//          $.post( "/sendkey", {pressed_key: "PowerButtonPress", mgnt_device:'{{dev}}'});
+//          e.preventDefault();
+//          $('#confirm').modal.model('hide');
+//         });
+//       $("#cancel").on('click',function(e){
+//        e.preventDefault();
+//        $('#confirm').modal.model('hide');
+//       });
+// }
+
+
+
+var modalConfirm = function(callback){
+  
+  $("#powerperform").on("click", function(){
+    $("#confirm-modal").modal('show');
+  });
+
+  $("#modal-btn-si").on("click", function(){
+    callback(true);
+    $("#confirm-modal").modal('hide');
+  });
+  
+  $("#modal-btn-no").on("click", function(){
+    callback(false);
+    $("#confirm-modal").modal('hide');
+  });
+};
+
+modalConfirm(function(confirm){
+  if(confirm){
+    //Acciones si el usuario confirma
+    $.post( "/sendkey", {pressed_key: "PowerButtonPress", mgnt_device:'{{dev}}'});
+  }
+});
+
+
+
+$(document).ready(function() {
+        $('#console_mouse').on("mousemove", function(e) {
+            var offset = $(this).offset();
+            var X = (e.pageX - offset.left);
+            var Y = (e.pageY - offset.top);
+            $('#coord').text('Mouse Position: X:' + X + ', Y: ' + Y);
+        });
+    });
+
+
+$(document).ready(function() {
+   $('#console_mouse').click(function(e) {
+       var offset = $(this).offset();
+       var X = (e.pageX - offset.left);
+       var Y = (e.pageY - offset.top);
+       $('#click').text('  - Mouse Click: X: ' + X + ', Y: ' + Y);
+   });
+});
+
+
+ </script>
+
+
+
+
+ {% endblock %}
+ 
