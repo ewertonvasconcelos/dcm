@@ -6,3 +6,5 @@ INFO in views: ewerton.vasconcelos@poli.ufrj.br logged out
 INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
 [2021-06-24 17:38:22,240] 192.168.1.2 requested http://192.168.1.2:5000/login
 INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
+[2021-06-24 18:46:42,189] 192.168.1.2 requested http://192.168.1.2:5000/login
+INFO in views: ewerton.vasconcelos@poli.ufrj.br logged in successfully
