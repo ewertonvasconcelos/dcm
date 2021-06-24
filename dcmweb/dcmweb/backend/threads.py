@@ -3,9 +3,9 @@ import os
 import threading  
 import psutil
 import time
-from backend.dcm import ManageService, UpdateMgntDevicesLocation
-from backend.models import Server, db
-from backend.views import updateServerPowerState, getPowerStateFromMgnt
+from ..backend.dcm import ManageService, UpdateMgntDevicesLocation
+from ..backend.models import Server, db
+from ..backend.views import updateServerPowerState, getPowerStateFromMgnt
 
 #============================ Threading to stop non used streamers =====================================
 def StopNotUsedStreamers():
@@ -21,6 +21,7 @@ def StopNotUsedStreamers():
             #print(conn)
 
             if(port >= 8100 and port <= 8199):
+                print(port, status)
                 if((port not in actives) and (status!='ESTABLISHED')):
                     actives.append(port)
 

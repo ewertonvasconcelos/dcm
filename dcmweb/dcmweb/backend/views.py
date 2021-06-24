@@ -4,15 +4,15 @@ from flask import Blueprint, request, redirect, url_for, \
     render_template, flash, session, jsonify
 
 from werkzeug.utils import secure_filename
-from app import oidc, _logger, app
+from dcmweb import oidc, _logger, app
 import logging
 import os
 import time
 import subprocess
-from backend.dcm import *
-from backend.models import *
-from backend.threads import *
-from config import config
+from ..backend.dcm import *
+from ..backend.models import *
+from ..backend.threads import *
+from ..config import config
 
 view = Blueprint('view', __name__)
 
@@ -100,7 +100,8 @@ def upload_file():
                 #print(filePath + filename)
 
                 if os.path.exists(filePath + filename):
-                    os.remove(filePath + filename)
+                    os.remove('/var/www/dcmweb/static/profile/' + filename)
+                    #os.remove(filePath + filename)
 
                 file.save(os.path.join(filePath,
                           oidc.user_getfield('sub')))
@@ -175,58 +176,58 @@ def server_management(server_id=""):
         if(server_id == ""):
             return redirect(url_for('view.server_list'))
 
-        try:
-            server = Server.query.filter_by(id=server_id).first()
-            videoDevsList = get_video_devs()
-            mgntDevsList = get_mgnt_devs()
-            found=0
+        #try:
+        server = Server.query.filter_by(id=server_id).first()
+        videoDevsList = get_video_devs()
+        mgntDevsList = get_mgnt_devs()
+        found=0
 
-            #--- Check video device connected:
-            for videoDev in videoDevsList:
-                if(videoDev.split(" ")[-1] == server.video_port.split(" ")[-1]):
-                    server.video_port = videoDev
-                    db.session.commit()
-                    found=1
-                    break
+        #--- Check video device connected:
+        for videoDev in videoDevsList:
+            if(videoDev.split(" ")[-1] == server.video_port.split(" ")[-1]):
+                server.video_port = videoDev
+                db.session.commit()
+                found=1
+                break
 
-            if(not found):       
-                flash('The video device for '+server.hostname+' is not connected, check the device and try again','danger')
-                return redirect(url_for('view.server_list'))
-
-            videoDevId = videoDev.split(" ")[0][-1]
-            streamPort = "810"+videoDevId
-            
-            status = ManageService('ustreamer@{}'.format(videoDevId),'start')
-            
-            if (status!=None):
-                flash('Error starting the video streamer for server '+server.hostname+' check the log and try again','danger')
-                return redirect(url_for('view.server_list'))
-                
-            #---
-            #--- Check mgnt device connected:
-            found=0
-            for mgntDev in mgntDevsList:
-                if(mgntDev.split(" ")[-1] == server.mgnt_port.split(" ")[-1]):
-                    dev = mgntDev.split(" ")[0]
-                    server.mgnt_port = mgntDev
-                    db.session.commit()
-                    found=1
-                    break
-
-            if(not found):       
-                flash('The management device for '+server.hostname+' is not connected, check the device and try again','danger')
-                return redirect(url_for('view.server_list'))
-                    
-
-            #--- Check server power state 
-
-            serverState = getPowerStateFromMgnt(dev)
-
-
-        except:
-            
-            flash('Error opening the console for the server ' + server.hostname + ',check the logs and try again...' , 'danger')
+        if(not found):       
+            flash('The video device for '+server.hostname+' is not connected, check the device and try again','danger')
             return redirect(url_for('view.server_list'))
+
+        videoDevId = videoDev.split(" ")[0][-1]
+        streamPort = "810"+videoDevId
+        
+        status = ManageService('ustreamer@{}'.format(videoDevId),'start')
+        print('DEBUG:', status)
+        if (status!=None):
+            flash('Error starting the video streamer for server '+server.hostname+' check the log and try again','danger')
+            return redirect(url_for('view.server_list'))
+            
+        #---
+        #--- Check mgnt device connected:
+        found=0
+        for mgntDev in mgntDevsList:
+            if(mgntDev.split(" ")[-1] == server.mgnt_port.split(" ")[-1]):
+                dev = mgntDev.split(" ")[0]
+                server.mgnt_port = mgntDev
+                db.session.commit()
+                found=1
+                break
+
+        if(not found):       
+            flash('The management device for '+server.hostname+' is not connected, check the device and try again','danger')
+            return redirect(url_for('view.server_list'))
+                
+
+        #--- Check server power state 
+
+        serverState = getPowerStateFromMgnt(dev)
+
+
+        #except:
+            
+        #    flash('Error opening the console for the server ' + server.hostname + ',check the logs and try again...' , 'danger')
+        #    return redirect(url_for('view.server_list'))
 
 
         return render_template('server.html',

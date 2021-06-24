@@ -3,7 +3,7 @@ import time
 from collections import defaultdict
 import pyudev
 import subprocess
-from backend.models import Server, db
+from ..backend.models import Server, db
 import netplan
 import socket
 

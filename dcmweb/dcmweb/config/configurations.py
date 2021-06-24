@@ -12,7 +12,7 @@ class Config(object):
     OIDC_SCOPES = ['openid', 'email', 'profile']
     OIDC_INTROSPECTION_AUTH_METHOD = 'client_secret_post'
     HANDLER = "RotatingFileHandler"
-    UPLOAD_FOLDER = '/static/profile/'
+    UPLOAD_FOLDER = '/var/www/dcmweb/static/profile/'
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     SERIAL_SPEED=9600
     SQLALCHEMY_DATABASE_URI = 'postgresql://dcm:password@localhost:5432/dcm'
@@ -21,7 +21,7 @@ class Config(object):
     
 
 class ProductionConfig(Config):
-    OIDC_CLIENT_SECRETS = 'config/client_secrets_prod.json'
+    OIDC_CLIENT_SECRETS = '/var/www/dcmweb/config/client_secrets_prod.json'
     OIDC_OPENID_REALM = 'flask-demo'
     OIDC_ID_TOKEN_COOKIE_SECURE = False
     HANDLER = "StreamHandler"
@@ -31,6 +31,6 @@ class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = True
     ENV = DEVELOPMENT
-    OIDC_CLIENT_SECRETS = 'config/client_secrets_dev.json'
+    OIDC_CLIENT_SECRETS = '/var/www/dcmweb/config/client_secrets_dev.json'
     OIDC_OPENID_REALM = 'flask-demo'
     OIDC_ID_TOKEN_COOKIE_SECURE = False

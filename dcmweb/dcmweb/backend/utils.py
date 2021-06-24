@@ -67,7 +67,7 @@ def configure_logger(app):
         logger.addHandler(h2)
     else:  # elif config.HANDLER == "RotatingFileHandler":
         handler = RotatingFileHandler(
-            'access.log', maxBytes=10000, backupCount=1)
+            '/var/www/dcmweb/access.log', maxBytes=10000, backupCount=1)
         handler.setFormatter(RequestFormatter())
         handler.setLevel(logging.DEBUG if app.debug else logging.INFO)
         logger.addHandler(handler)
