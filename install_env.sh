@@ -74,6 +74,7 @@ function AddDcmUser() {
     usermod dcm -s /bin/bash
 
 
+
     log "i" "Adding sudoers rule"
     echo "# Sudoers configuration for Date Center Mamager" >> /etc/sudoers
     echo "dcm ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -120,7 +121,7 @@ function AddSystemdUstreamer () {
 
     cat << EOF > /etc/systemd/system/ustreamer@.service
 [Unit]
-Description=uStreamer service
+Description=uStreamer servicemói
 After=network.target
 [Service]
 Environment="SCRIPT_ARGS=%I"
@@ -130,7 +131,7 @@ ExecStart=/usr/bin/ustreamer/ustreamer --log-level 0 --device-timeout=8 --resolu
 WantedBy=multi-user.target
 EOF
 
-    #systemctl daemon-reload
+    systemctl daemon-reload
     #sudo systemctl enable ustreamer@.service
     #sudo systemctl enable ustreamer@0.service
     #sudo systemctl start ustreamer@0.service
@@ -197,10 +198,92 @@ function AddUserPermissions () {
     ./scripts/setSerialPermissions.sh dcm
 }
 
-function ConfigureNetplan() {
-    chmod 666 /etc/netplan/01-netcfg.yaml
+#function ConfigureNetplan() {
+#    chmod 666 /etc/netplan/01-netcfg.yaml
+#}
+
+function InstallWebServer () {
+    log "i" "Instaling Python requirements"
+    apt install python3
+    apt install python3-venv
+
+    log "i" "Instaling Apache2"
+    apt install -y apache2
+    log "i" "Creating firewall rules"
+    ufw allow 'Apache'
+    systemctl status apache2
+
+
+    log "i" "Instaling Apache requirements"
+    apt install -y libapache2-mod-wsgi python-dev
+    apt install -y libapache2-mod-wsgi libapache2-mod-wsgi-py3 python-dev
+
+
+    log "i" "Configuring Web App"
+    mkdir -p /var/www/dcmweb/
+    python3 -m venv /var/www/dcmweb/env && . /var/www/dcmweb/env/bin/activate
+    python -m pip install --upgrade pip
+    pip install -r dcmweb/requirements.txt
+
+    log "i" "Configuring WSGI"
+
+cat << EOF > /etc/apache2/sites-available/dcmweb.conf
+WSGIPythonHome /var/www/dcmweb/env
+WSGIPythonPath /var/www/
+
+
+
+<VirtualHost *:80>
+    ServerName 192.168.1.2
+    ServerAdmin email@mywebsite.com
+    #WSGIScriptAlias /dcmweb /home/ewerton/flask-test/wsgi.py
+    WSGIScriptAlias / /var/www/wsgi.py
+    #WSGIDaemonProcess user=root group=root processes=1 threads=1
+
+   
+#Alias /dcmweb /home/ewerton/flask-test/oi.html  
+   <Directory /var/www/dcmweb/>
+        #Order allow,deny
+        #Allow from all
+        Require all granted	
+    </Directory>
+    Alias /static /var/www/dcmweb/static
+    <Directory /var/www/dcmweb/static/>
+	Require all granted
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    LogLevel warn
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+EOF
+    cp -r dcmweb/dcmweb/* /var/www/dcmweb/
+    cd /var/www/dcmweb/ a2ensite dcmweb
+    systemctl reload apache2
+
+    log "i" "Seting permissions"
+    usermod -a -G tty www-data
+    usermod -a -G dialout www-data
+
+
+
+    cat << EOF > /var/www/dcmweb/dcmweb.wsgi
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/dcmweb/")
+
+from dcmweb import app as application
+application.secret_key = 'Add your secret key'
+EOF
+
+    systemctl reload apache2
 
 }
+
+
+
 
 
 function DoMain () {
