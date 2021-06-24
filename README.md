@@ -1,10 +1,10 @@
 # DCM - Data Center Manager 
 ## Universidade Federal do Rio de Janeiro
 ## Projeto de Graduação para o Curso de Engenharia Eletrônica e Computação
-> Aluno
+> Aluno:
 Ewerton Vasconcelos da Silva
 
-> Orientador
+> Orientador:
 Rodrigo de Sousa Couto
 
 > Objetivos
