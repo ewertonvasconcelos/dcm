@@ -21,7 +21,7 @@ def StopNotUsedStreamers():
             #print(conn)
 
             if(port >= 8100 and port <= 8199):
-                print(port, status)
+                #print(port, status)
                 if((port not in actives) and (status!='ESTABLISHED')):
                     actives.append(port)
 
