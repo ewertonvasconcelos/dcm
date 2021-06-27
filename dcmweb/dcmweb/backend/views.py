@@ -100,8 +100,8 @@ def upload_file():
                 #print(filePath + filename)
 
                 if os.path.exists(filePath + filename):
-                    os.remove('/var/www/dcmweb/static/profile/' + filename)
-                    #os.remove(filePath + filename)
+                    #os.remove('/var/www/dcmweb/static/profile/' + filename)
+                    os.remove(filePath + filename)
 
                 file.save(os.path.join(filePath,
                           oidc.user_getfield('sub')))
